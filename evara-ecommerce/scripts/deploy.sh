@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update code from repository
-git pull origin main
+git pull origin master
 
 # Install dependencies
 npm install
