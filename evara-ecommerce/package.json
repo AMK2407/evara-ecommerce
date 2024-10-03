@@ -1,0 +1,13 @@
+{
+  "name": "evara-ecommerce",
+  "version": "1.0.0",
+  "description": "Evara E-commerce Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "deploy": "bash scripts/deploy.sh"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
