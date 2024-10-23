@@ -5,16 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--=============== FLATICON ===============-->
-    <link
-      rel="stylesheet"
-      href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css"
-    />
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
 
     <!--=============== SWIPER CSS ===============-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="./assets/css/styles.css" />
@@ -92,20 +86,8 @@
                 <div class="login">
                     <h3 class="section__title">Login</h3>
                     <form id="loginForm" class="form grid">
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Your Email"
-                            class="form__input"
-                            required
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Your Password"
-                            class="form__input"
-                            required
-                        />
+                        <input type="email" name="email" placeholder="Your Email" class="form__input" required />
+                        <input type="password" name="password" placeholder="Your Password" class="form__input" required />
                         <div class="form__message" id="loginMessage"></div>
                         <div class="form__btn">
                             <button type="submit" class="btn">Login</button>
@@ -124,24 +106,24 @@
         </div>
     </footer>
 
-    <!--=============== AWS SDK and Validation Script ===============-->
+    <!--=============== AWS SDK ===============-->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.991.0.min.js"></script>
     <script>
+      // Configure AWS SDK
       AWS.config.update({
         region: 'us-east-1', // Specify your region
-        credentials: new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: 'YOUR_IDENTITY_POOL_ID', // Your Identity Pool ID
-        }),
+        accessKeyId: 'YOUR_ACCESS_KEY', // Your AWS Access Key
+        secretAccessKey: 'YOUR_SECRET_KEY' // Your AWS Secret Key
       });
 
-      var docClient = new AWS.DynamoDB.DocumentClient();
+      const docClient = new AWS.DynamoDB.DocumentClient();
 
       document.getElementById('loginForm').addEventListener('submit', async function (e) {
         e.preventDefault();
-        var email = document.getElementsByName('email')[0].value;
-        var password = document.getElementsByName('password')[0].value;
+        const email = document.getElementsByName('email')[0].value;
+        const password = document.getElementsByName('password')[0].value;
 
-        var params = {
+        const params = {
           TableName: 'Users', // Your DynamoDB table name
           Key: {
             email: email,
@@ -151,8 +133,7 @@
         try {
           const data = await docClient.get(params).promise(); // Use Promises
           if (data.Item) {
-            // Assume `data.Item.password` is a hashed password
-            if (await verifyPassword(password, data.Item.password)) { // Use a password verification function
+            if (data.Item.password === password) { // Compare with stored password
               window.location.href = 'index.html'; // Redirect to home page
             } else {
               window.location.href = 'incorrect-password.html'; // Redirect to error page
@@ -165,11 +146,6 @@
           alert("Error occurred. Please try again later.");
         }
       });
-
-      // Example of a password verification function
-      async function verifyPassword(inputPassword, storedPassword) {
-        // Implement password verification logic, e.g., bcrypt.compare
-      }
     </script>
 
     <!--=============== MAIN JS ===============-->
