@@ -22,19 +22,73 @@
     <title>Login/Register - Ecommerce Website</title>
   </head>
   <body>
-    <!-- [Previous header code remains the same] -->
+    <!--=============== HEADER ===============-->
+    <header class="header">
+      <div class="header__top">
+        <div class="header__container container">
+          <div class="header__contact">
+            <span>(+01) - 2345 - 6789</span>
+            <span>Our location</span>
+          </div>
+          <p class="header__alert-news">
+            Super Values Deals - Save more coupons
+          </p>
+          <a href="login-register.html" class="header__top-action">
+            Log In / Sign Up
+          </a>
+        </div>
+      </div>
+
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img
+            class="nav__logo-img"
+            src="assets/img/logo.svg"
+            alt="website logo"
+          />
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Home</a>
+            </li>
+            <li class="nav__item">
+              <a href="shop.html" class="nav__link">Shop</a>
+            </li>
+            <li class="nav__item">
+              <a href="accounts.html" class="nav__link">My Account</a>
+            </li>
+            <li class="nav__item">
+              <a href="compare.html" class="nav__link">Compare</a>
+            </li>
+            <li class="nav__item">
+              <a href="login-register.html" class="nav__link active-link">Login</a>
+            </li>
+          </ul>
+          <div class="header__search">
+            <input type="text" placeholder="Search For Items..." class="form__input" />
+            <button class="search__btn">
+              <img src="assets/img/search.png" alt="search icon" />
+            </button>
+          </div>
+        </div>
+
+        <div class="header__user-actions">
+          <a href="wishlist.html" class="header__action-btn" title="Wishlist">
+            <img src="assets/img/icon-heart.svg" alt="" />
+            <span class="count">3</span>
+          </a>
+          <a href="cart.html" class="header__action-btn" title="Cart">
+            <img src="assets/img/icon-cart.svg" alt="" />
+            <span class="count">3</span>
+          </a>
+        </div>
+      </nav>
+    </header>
 
     <!--=============== MAIN ===============-->
     <main class="main">
-      <!--=============== BREADCRUMB ===============-->
-      <section class="breadcrumb">
-        <ul class="breadcrumb__list flex container">
-          <li><a href="index.html" class="breadcrumb__link">Home</a></li>
-          <li><span class="breadcrumb__link">></span></li>
-          <li><span class="breadcrumb__link">Login / Register</span></li>
-        </ul>
-      </section>
-
       <!--=============== LOGIN-REGISTER ===============-->
       <section class="login-register section--lg">
         <div class="login-register__container container grid">
@@ -62,58 +116,59 @@
               </div>
             </form>
           </div>
-
-          <!-- Register Form -->
-          <div class="register">
-            <h3 class="section__title">Create an Account</h3>
-            <form id="registerForm" class="form grid">
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                class="form__input"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                class="form__input"
-                required
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Your Password"
-                class="form__input"
-                required
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                class="form__input"
-                required
-              />
-              <div class="form__message" id="registerMessage"></div>
-              <div class="form__btn">
-                <button type="submit" class="btn">Submit & Register</button>
-              </div>
-            </form>
-          </div>
         </div>
       </section>
-
-      <!-- [Rest of the HTML remains the same] -->
     </main>
 
-    <!-- [Footer remains the same] -->
+    <!--=============== FOOTER ===============-->
+    <footer class="footer container">
+      <div class="footer__bottom">
+        <p class="copyright">&copy; 2024 Evara. All right reserved</p>
+        <span class="designer">Designed by Crypticalcoder</span>
+      </div>
+    </footer>
 
-    <!--=============== SWIPER JS ===============-->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!--=============== AWS SDK and Validation Script ===============-->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.991.0.min.js"></script>
+    <script>
+      AWS.config.update({
+        region: 'us-east-1', // Specify your region
+        credentials: new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: 'YOUR_IDENTITY_POOL_ID',
+        }),
+      });
 
-    <!--=============== AUTH JS ===============-->
-    <script src="assets/js/auth.js"></script>
+      var docClient = new AWS.DynamoDB.DocumentClient();
+
+      document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = document.getElementsByName('email')[0].value;
+        var password = document.getElementsByName('password')[0].value;
+
+        var params = {
+          TableName: 'Users', // Your DynamoDB table name
+          Key: {
+            email: email,
+          },
+        };
+
+        docClient.get(params, function (err, data) {
+          if (err) {
+            console.error('Unable to retrieve item. Error:', JSON.stringify(err, null, 2));
+          } else {
+            if (data.Item) {
+              if (data.Item.password === password) {
+                window.location.href = 'index.html'; // Redirect to home page
+              } else {
+                window.location.href = 'incorrect-password.html'; // Redirect to error page
+              }
+            } else {
+              window.location.href = 'incorrect-password.html'; // Redirect to error page
+            }
+          }
+        });
+      });
+    </script>
 
     <!--=============== MAIN JS ===============-->
     <script src="assets/js/main.js"></script>
