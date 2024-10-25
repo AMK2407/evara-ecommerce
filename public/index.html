@@ -49,56 +49,20 @@
         </div>
     </footer>
 
-    <!--=============== AWS SDK ===============-->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.991.0.min.js"></script>
     <script>
-      // Configure AWS SDK
-      AWS.config.update({
-        region: 'us-east-1', // Specify your region
-        accessKeyId: 'YOUR_ACCESS_KEY', // Your AWS Access Key
-        secretAccessKey: 'YOUR_SECRET_KEY' // Your AWS Secret Key
-      });
-
-      const docClient = new AWS.DynamoDB.DocumentClient();
-
-      document.getElementById('loginForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const email = document.getElementsByName('email')[0].value;
-        const password = document.getElementsByName('password')[0].value;
-
-        // Replace this hardcoded check with your database logic
-        if (email === "akashmkamthe@gmail.com" && password === "test123") {
-          window.location.href = 'index.html'; // Redirect to home page
-        } else {
-          window.location.href = 'incorrect-password.html'; // Redirect to error page
-        }
-
-        // Optional: The DynamoDB logic can be added here if you're using it for other purposes.
-        /*
-        const params = {
-          TableName: 'Users', // Your DynamoDB table name
-          Key: {
-            email: email,
-          },
-        };
-
-        try {
-          const data = await docClient.get(params).promise(); // Use Promises
-          if (data.Item) {
-            if (data.Item.password === password) { // Compare with stored password
-              window.location.href = 'index.html'; // Redirect to home page
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementsByName('email')[0].value;
+            const password = document.getElementsByName('password')[0].value;
+            
+            // Check for specific email and password
+            if (email === "akashmkamthe@gmail.com" && password === "test123") {
+                window.location.href = 'index.html'; // Redirect to home page on success
             } else {
-              window.location.href = 'incorrect-password.html'; // Redirect to error page
+                window.location.href = 'incorrect-password.html'; // Redirect to error page
             }
-          } else {
-            window.location.href = 'incorrect-password.html'; // Redirect to error page
-          }
-        } catch (err) {
-          console.error('Unable to retrieve item. Error:', JSON.stringify(err, null, 2));
-          alert("Error occurred. Please try again later.");
-        }
-        */
-      });
+        });
     </script>
 
     <!--=============== MAIN JS ===============-->
